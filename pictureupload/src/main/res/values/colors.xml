@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="hw_item_light_bg_outline">#FF383B43</color>
+    <color name="hw_item_light_bg">#00000000</color>
+    <color name="underline_color">#4F383B43</color>
+    <color name="interval_line">#FF383B43</color>
+</resources>

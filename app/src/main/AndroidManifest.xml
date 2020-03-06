@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.wyb.mytest">
+    <!--调用相机-->
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <application
+        android:allowBackup="true"
+        android:fullBackupContent="@xml/backup_descriptor"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".activity.MainActivity"
+            android:launchMode="standard"
+            android:configChanges="orientation|screenSize|keyboardHidden|fontScale|keyboard">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!--
+        “mcc“ 移动国家号码，由三位数字组成，每个国家都有自己独立的MCC，可以识别手机用户所属国家。
+        “mnc“ 移动网号，在一个国家或者地区中，用于区分手机用户的服务商。
+        “locale“ 所在地区发生变化。
+        “touchscreen“ 触摸屏已经改变。（这不应该常发生。）
+        “keyboard“ 键盘模式发生变化，例如：用户接入外部键盘输入。
+        “keyboardHidden“ 用户打开手机硬件键盘
+        “navigation“ 导航型发生了变化。（这不应该常发生。）
+        “orientation“ 设备旋转，横向显示和竖向显示模式切换。
+        “fontScale“ 全局字体大小缩放发生改变
+        -->
+        <activity
+            android:name="com.wyb.pictureupload.activity.PhotoActivity"
+            android:launchMode="standard"
+            android:configChanges="orientation|screenSize|keyboardHidden|fontScale|keyboard"
+            android:theme="@style/BaseTheme" />
+
+        <activity
+            android:name="com.wyb.pictureupload.activity.ClipImageActivity"
+            android:launchMode="standard"
+            android:configChanges="orientation|screenSize|keyboardHidden|fontScale|keyboard"
+            android:theme="@style/BaseTheme" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.wyb.mytest.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+    </application>
+
+</manifest>

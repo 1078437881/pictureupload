@@ -1,0 +1,2 @@
+include ':app', ':pictureupload'
+rootProject.name='MyTest'
