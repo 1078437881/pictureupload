@@ -20,6 +20,7 @@ import androidx.core.os.EnvironmentCompat;
 
 import com.wyb.common.log.MyLog;
 import com.wyb.common.utils.AndroidVersionUtils;
+import com.wyb.common.utils.PhotoAlbumUtils;
 import com.wyb.pictureupload.constants.Constants;
 
 import java.io.File;
@@ -31,9 +32,10 @@ import java.util.Locale;
 public class PhotoActivity extends Activity {
 
     private final static int PERMISSION_CAMERA_REQUEST_CODE = 0x20000001;
+    private final static int PERMISSION_ALBUM_REQUEST_CODE = 0x20000002;
 
     private final static int CAMERA_REQUEST_CODE = 0x20000001;
-
+    private final static int ALBUM_REQUEST_CODE = 0x20000002;
     //用于保存拍照图片的uri
     private Uri mCameraUri;
     // 用于保存图片的文件路径，Android 10以下使用图片路径访问图片
@@ -44,12 +46,15 @@ public class PhotoActivity extends Activity {
         super.onCreate(savedInstanceState);
         MyLog.d("PhotoActivity.onCreate");
         Intent intent = getIntent();
-        int enterType = intent.getIntExtra(Constants.ENTER_PHOTO_TYPE,0);
-        if(enterType==Constants.ENTER_PHOTHGRAPH){
-            checkPermissionAndCamera();
+        int enterType = intent.getIntExtra(Constants.ENTER_PHOTO_TYPE, 0);
+        if (enterType == Constants.ENTER_PHOTHGRAPH) {
             MyLog.d("checkPermissionAndCamera");
+            checkPermissionAndCamera();
+
         }
-        if(enterType==Constants.ENTER_ALBUM){
+        if (enterType == Constants.ENTER_ALBUM) {
+            MyLog.d("checkPermissionAndAlbum");
+            checkPermissionAndAlbum();
 
         }
     }
@@ -63,19 +68,39 @@ public class PhotoActivity extends Activity {
             openCamera();
         } else {
             //没有权限，申请权限。
-            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.CAMERA},
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA},
                     PERMISSION_CAMERA_REQUEST_CODE);
         }
     }
 
+    private void checkPermissionAndAlbum() {
+        int hasAlbumPermission = ContextCompat.checkSelfPermission(getApplication(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (hasAlbumPermission == PackageManager.PERMISSION_GRANTED) {
+            openAlbum();
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    PERMISSION_ALBUM_REQUEST_CODE);
+        }
+    }
+
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode==PERMISSION_CAMERA_REQUEST_CODE){
-            if(grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+        if (requestCode == PERMISSION_CAMERA_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 openCamera();
-            }else{
-                Toast.makeText(this,"拍照权限被拒绝", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "拍照权限被拒绝", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        if (requestCode == PERMISSION_ALBUM_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                openAlbum();
+            } else {
+                Toast.makeText(this, "存储权限被拒绝", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -87,25 +112,49 @@ public class PhotoActivity extends Activity {
             if (resultCode == RESULT_OK) {
                 Bundle bundle = new Bundle();
                 if (AndroidVersionUtils.isToAndroidQ()) {
-                    // Android 10 使用图片uri加载
-                     bundle.putParcelable(Constants.HEAD_IMAGE_URI_KEY,mCameraUri);
-//                    ivPhoto.setImageURI(mCameraUri);
+                    bundle.putParcelable(Constants.HEAD_IMAGE_URI_KEY, mCameraUri);
                 } else {
-                    // 使用图片路径加载
-                    bundle.putString(Constants.HEAD_IMAGE_PATH_KEY,mCameraImagePath);
-//                    ivPhoto.setImageBitmap(BitmapFactory.decodeFile(mCameraImagePath));
+                    bundle.putString(Constants.HEAD_IMAGE_PATH_KEY, mCameraImagePath);
                 }
-                Intent intent = new Intent(this,ClipImageActivity.class);
-                intent.putExtra(Constants.BUNDLE_MESSAGE_KEY,bundle);
+                Intent intent = new Intent(this, ClipImageActivity.class);
+                intent.putExtra(Constants.BUNDLE_MESSAGE_KEY, bundle);
                 startActivity(intent);
                 PhotoActivity.this.finish();
             } else {
-                Toast.makeText(this,"取消",Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "取消", Toast.LENGTH_LONG).show();
                 PhotoActivity.this.finish();
             }
         }
+
+        if (requestCode == ALBUM_REQUEST_CODE) {
+            // 获取图片
+            if (resultCode == RESULT_OK) {
+                Uri CameraUri = data.getData();
+                if(CameraUri!=null){
+                    mCameraUri = CameraUri;
+                    Bundle bundle = new Bundle();
+                    if (AndroidVersionUtils.isToAndroidQ()) {
+                        bundle.putParcelable(Constants.HEAD_IMAGE_URI_KEY, mCameraUri);
+                    } else {
+                        mCameraImagePath = PhotoAlbumUtils.getRealPathFromUri(this,mCameraUri);
+                        bundle.putString(Constants.HEAD_IMAGE_PATH_KEY, mCameraImagePath);
+                    }
+                    Intent intent = new Intent(this, ClipImageActivity.class);
+                    intent.putExtra(Constants.BUNDLE_MESSAGE_KEY, bundle);
+                    startActivity(intent);
+                }
+                PhotoActivity.this.finish();
+            } else {
+                Toast.makeText(this, "取消", Toast.LENGTH_LONG).show();
+                PhotoActivity.this.finish();
+            }
+
+        }
     }
 
+    /**
+     * 调起相机
+     */
     private void openCamera() {
         Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // 判断是否有相机
@@ -141,6 +190,16 @@ public class PhotoActivity extends Activity {
                 startActivityForResult(captureIntent, CAMERA_REQUEST_CODE);
             }
         }
+    }
+
+    /**
+     * 打开相册
+     */
+    private void openAlbum() {
+        Intent intentToPickPic = new Intent(Intent.ACTION_PICK, null);
+        // 如果限制上传到服务器的图片类型时可以直接写如："image/jpeg 、 image/png等的类型" 所有类型则写 "image/*"
+        intentToPickPic.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/jpeg");
+        startActivityForResult(intentToPickPic, ALBUM_REQUEST_CODE);
     }
 
     /**

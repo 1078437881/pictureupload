@@ -9,7 +9,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.wyb.common.view.dialog.BottomDialog;
-import com.wyb.pictureupload.R;
 import com.wyb.pictureupload.activity.PhotoActivity;
 import com.wyb.pictureupload.constants.Constants;
 import com.wyb.pictureupload.constants.ResId;

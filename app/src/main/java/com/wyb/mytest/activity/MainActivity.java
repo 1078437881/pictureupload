@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
     private void getIntentMsg() {
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra(Constants.BUNDLE_MESSAGE_KEY);

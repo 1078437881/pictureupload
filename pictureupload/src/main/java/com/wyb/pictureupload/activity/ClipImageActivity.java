@@ -16,7 +16,6 @@ import androidx.annotation.Nullable;
 import com.wyb.common.log.MyLog;
 import com.wyb.common.utils.AndroidVersionUtils;
 import com.wyb.common.view.image.ClipImageLayout;
-import com.wyb.pictureupload.R;
 import com.wyb.pictureupload.constants.Constants;
 import com.wyb.pictureupload.constants.ResId;
 import com.wyb.pictureupload.impl.PuImpl;
@@ -29,7 +28,6 @@ public class ClipImageActivity extends Activity implements View.OnClickListener 
     private Uri mCameraUri;
     // 用于保存图片的文件路径，Android 10以下使用图片路径访问图片
     private String mCameraImagePath;
-
     private Bitmap mCameraBitmap;
 
     private ClipImageLayout clipImageLayout;
@@ -108,6 +106,7 @@ public class ClipImageActivity extends Activity implements View.OnClickListener 
         if (id == ResId.id.confirm_tv) {
             Bitmap bitmap = clipImageLayout.clip();
             PuImpl.headListener.onBack(bitmap);
+            finish();
         } else if (id == ResId.id.rotate_photo_tv) {
             mCameraBitmap = rotateBitmap(90, mCameraBitmap);
             clipImageLayout.setImageBitmap(mCameraBitmap);
