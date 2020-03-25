@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 
 import com.wyb.common.log.MyLog;
 import com.wyb.common.utils.AndroidVersionUtils;
+import com.wyb.common.utils.BitmapUtils;
 import com.wyb.common.view.image.ClipImageLayout;
 import com.wyb.pictureupload.constants.Constants;
 import com.wyb.pictureupload.constants.ResId;
@@ -104,7 +105,7 @@ public class ClipImageActivity extends Activity implements View.OnClickListener 
     public void onClick(View v) {
         int id = v.getId();
         if (id == ResId.id.confirm_tv) {
-            Bitmap bitmap = clipImageLayout.clip();
+            Bitmap bitmap = BitmapUtils.scaleBitmap(clipImageLayout.clip(),PuImpl.x,PuImpl.y);
             PuImpl.headListener.onBack(bitmap);
             finish();
         } else if (id == ResId.id.rotate_photo_tv) {

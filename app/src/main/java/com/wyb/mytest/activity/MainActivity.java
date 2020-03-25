@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         userHead.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BottomButtonDialog bottomButtonDialogView = new BottomButtonDialog(MainActivity.this);
+                BottomButtonDialog bottomButtonDialogView = new BottomButtonDialog(MainActivity.this,userHead);
                 bottomButtonDialogView.isCanCelable(true);
                 bottomButtonDialogView.show();
             }

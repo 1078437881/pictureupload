@@ -1,2 +1,29 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.wyb.pictureupload" />
+    package="com.wyb.pictureupload">
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <application>
+        <activity
+            android:name="com.wyb.pictureupload.activity.PhotoActivity"
+            android:launchMode="standard"
+            android:configChanges="orientation|screenSize|keyboardHidden|fontScale|keyboard"
+            android:theme="@style/BaseTheme" />
+
+        <activity
+            android:name="com.wyb.pictureupload.activity.ClipImageActivity"
+            android:launchMode="standard"
+            android:configChanges="orientation|screenSize|keyboardHidden|fontScale|keyboard"
+            android:theme="@style/BaseTheme" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.wyb.mytest.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+    </application>
+</manifest>

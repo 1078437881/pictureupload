@@ -15,8 +15,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
+            android:layout_marginTop="@dimen/text_margin"
             android:text="取消"
-            android:textSize="14sp" />
+            android:textSize="@dimen/text_content_large" />
 
         <TextView
             android:id="@+id/confirm_tv"
@@ -24,8 +25,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
+            android:layout_marginTop="@dimen/text_margin"
             android:text="确定"
-            android:textSize="14sp" />
+            android:textSize="@dimen/text_content_large" />
 
         <TextView
             android:id="@+id/rotate_photo_tv"
@@ -33,8 +35,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
+            android:layout_marginTop="@dimen/text_margin"
             android:text="旋转图片"
-            android:textSize="14sp" />
+            android:textSize="@dimen/text_content_large" />
 
     </LinearLayout>
 

@@ -12,15 +12,20 @@ import com.wyb.common.view.dialog.BottomDialog;
 import com.wyb.pictureupload.activity.PhotoActivity;
 import com.wyb.pictureupload.constants.Constants;
 import com.wyb.pictureupload.constants.ResId;
+import com.wyb.pictureupload.impl.PuImpl;
 
 public class BottomButtonDialog extends BottomDialog implements View.OnClickListener {
 
     Context mContext;
     TextView photographTv, albumTv, canncelTv;
-
-    public BottomButtonDialog(@NonNull Context context) {
+    View imageView;
+    public BottomButtonDialog(@NonNull Context context,View view) {
         super(context, ResId.layout.buttom_dialog_view, ResId.style.BottomDialogStyle);
         mContext = context;
+        imageView = view;
+        PuImpl.x = imageView.getWidth();
+        PuImpl.y = imageView.getHeight();
+
     }
 
 
