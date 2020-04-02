@@ -22,7 +22,7 @@
     <style name="BaseTheme" parent="android:Theme.Light.NoTitleBar.Fullscreen">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowAnimationStyle">@style/bottomDialogAnim</item>
-        <item name="android:windowBackground">#00000000</item>
+        <item name="android:windowBackground">#FFFFFFFF</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:colorForeground">#FF184573</item>

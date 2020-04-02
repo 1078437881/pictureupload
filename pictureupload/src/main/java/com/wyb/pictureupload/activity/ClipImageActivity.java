@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Looper;
 import android.view.View;
 import android.widget.TextView;
 
@@ -44,6 +45,7 @@ public class ClipImageActivity extends Activity implements View.OnClickListener 
         if (mCameraBitmap != null) {
             clipImageLayout.setImageBitmap(mCameraBitmap);
         } else {
+            MyLog.e("mCameraBitmap==null");
             finish();
         }
     }
@@ -71,6 +73,12 @@ public class ClipImageActivity extends Activity implements View.OnClickListener 
                         return BitmapFactory.decodeStream(getContentResolver().openInputStream(mCameraUri));
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
+                        MyLog.e("FileNotFoundException:"+e.getMessage());
+                    } catch (IllegalStateException e) {
+                        e.printStackTrace();
+                        MyLog.e("IllegalStateException:"+e.getMessage());
+                    }finally {
+
                     }
                 }
             } else {
@@ -105,7 +113,7 @@ public class ClipImageActivity extends Activity implements View.OnClickListener 
     public void onClick(View v) {
         int id = v.getId();
         if (id == ResId.id.confirm_tv) {
-            Bitmap bitmap = BitmapUtils.scaleBitmap(clipImageLayout.clip(),PuImpl.x,PuImpl.y);
+            Bitmap bitmap = BitmapUtils.scaleBitmap(clipImageLayout.clip(), PuImpl.x, PuImpl.y);
             PuImpl.headListener.onBack(bitmap);
             finish();
         } else if (id == ResId.id.rotate_photo_tv) {

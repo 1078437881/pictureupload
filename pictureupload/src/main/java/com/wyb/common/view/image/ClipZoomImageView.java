@@ -24,7 +24,7 @@ public class ClipZoomImageView extends AppCompatImageView implements ScaleGestur
     private static float SCALE_MID = 2.0f;
 
     /**
-     * 初始化时的缩放比例，如果图片宽或高大于屏幕，此�?将小�?
+     * 初始化时的缩放比例，如果图片宽或高大于屏幕，此时将缩小
      */
     private float initScale = 1.0f;
     private boolean once = true;
@@ -332,7 +332,7 @@ public class ClipZoomImageView extends AppCompatImageView implements ScaleGestur
                 scale = Math.max(scaleW, scaleH);
             }
 
-            // 太小的图片放大处�?
+            // 太小的图片放大处理
             if (drawableW < frameSize && drawableH > frameSize) {
                 scale = 1.0f * frameSize / drawableW;
             } else if (drawableH < frameSize && drawableW > frameSize) {
@@ -364,15 +364,15 @@ public class ClipZoomImageView extends AppCompatImageView implements ScaleGestur
      */
     public Bitmap clip() {
         Bitmap bitmap = Bitmap.createBitmap(getWidth(), getHeight(),Bitmap.Config.ARGB_8888);
-        //将剪裁的图片压缩到500k以下，如果没需求就注释该段代码
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        int options = 100;//保存的图片自动压缩低于500k
-        bitmap.compress(Bitmap.CompressFormat.JPEG, options, baos);
-        while (baos.toByteArray().length / 1024 > 500) {
-            baos.reset();
-            options -= 10;
-            bitmap.compress(Bitmap.CompressFormat.JPEG, options, baos);
-        }
+//        //将剪裁的图片压缩到500k以下，如果没需求就注释该段代码
+//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//        int options = 100;//保存的图片自动压缩低于500k
+//        bitmap.compress(Bitmap.CompressFormat.JPEG, options, baos);
+//        while (baos.toByteArray().length / 1024 > 500) {
+//            baos.reset();
+//            options -= 10;
+//            bitmap.compress(Bitmap.CompressFormat.JPEG, options, baos);
+//        }
 
         Canvas canvas = new Canvas(bitmap);
         draw(canvas);
@@ -417,7 +417,7 @@ public class ClipZoomImageView extends AppCompatImageView implements ScaleGestur
     }
 
     /**
-     * 是否是拖动行�?
+     * 是否是拖动行为
      *
      * @param dx
      * @param dy
