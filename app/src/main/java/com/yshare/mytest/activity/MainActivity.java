@@ -1,4 +1,4 @@
-package com.wyb.mytest.activity;
+package com.yshare.mytest.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,14 +9,18 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 
-import com.wyb.common.log.MyLog;
-import com.wyb.common.utils.AndroidVersionUtils;
-import com.wyb.common.view.image.CircleImageView;
-import com.wyb.mytest.R;
-import com.wyb.pictureupload.constants.Constants;
-import com.wyb.pictureupload.impl.PuImpl;
-import com.wyb.pictureupload.interfaces.OnGetHeadListener;
-import com.wyb.pictureupload.view.BottomButtonDialog;
+import com.yshare.common.log.MyLog;
+import com.yshare.common.utils.AndroidVersionUtils;
+import com.yshare.common.utils.SharedPreferencesUtils;
+import com.yshare.common.view.image.CircleImageView;
+import com.yshare.mytest.R;
+import com.yshare.pictureupload.constants.Constants;
+import com.yshare.pictureupload.impl.PuImpl;
+import com.yshare.pictureupload.interfaces.OnGetHeadListener;
+import com.yshare.pictureupload.view.BottomButtonDialog;
+
+import static com.yshare.mytest.commom.Constants.SHAREDPREFS_USER;
+import static com.yshare.mytest.commom.Constants.SHAREDPREFS_USER_HEAD_IMAGE;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,23 +37,33 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         MyLog.d("MainActivity onCreate");
         setContentView(R.layout.activity_main);
+
+
         PuImpl.init(this, new OnGetHeadListener() {
             @Override
             public void onBack(Bitmap bitmap) {
                 userHead.setImageBitmap(bitmap);
+                SharedPreferencesUtils.saveBitmap(MainActivity.this, SHAREDPREFS_USER, bitmap, SHAREDPREFS_USER_HEAD_IMAGE);
             }
         });
         getIntentMsg();
         userHead = findViewById(R.id.user_head);
+//        Drawable drawable= SharedPreferencesUtils.getDrawableByKey(this, SHAREDPREFS_USER, USER_AVATAR);
+        //showImv.setBackgroundResource(R.mipmap.ic_launcher);
+        Bitmap bitmap = SharedPreferencesUtils.getBitmapByKey(this, SHAREDPREFS_USER, SHAREDPREFS_USER_HEAD_IMAGE);
+        MyLog.d("ReadShareperfs bitmap"+bitmap);
+        if (bitmap != null) {
+            userHead.setImageBitmap(bitmap);
+        }
+
         userHead.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BottomButtonDialog bottomButtonDialogView = new BottomButtonDialog(MainActivity.this,userHead);
+                BottomButtonDialog bottomButtonDialogView = new BottomButtonDialog(MainActivity.this, userHead);
                 bottomButtonDialogView.isCanCelable(true);
                 bottomButtonDialogView.show();
             }
         });
-
 
 
     }
