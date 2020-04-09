@@ -1,4 +1,4 @@
-package com.wyb.pictureupload;
+package com.yshare.mytest;
 
 import android.content.Context;
 
@@ -22,6 +22,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        assertEquals("com.wyb.pictureupload.test", appContext.getPackageName());
+        assertEquals("com.wyb.mytest", appContext.getPackageName());
     }
 }

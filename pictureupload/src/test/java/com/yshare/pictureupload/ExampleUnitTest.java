@@ -1,4 +1,4 @@
-package com.wyb.mytest;
+package com.yshare.pictureupload;
 
 import org.junit.Test;
 

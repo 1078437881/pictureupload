@@ -32,3 +32,21 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }
+
+
+ext {
+    MyVersion = "1.0"
+    MyNmae = "pictureupload"
+}
+task a_packaar {
+    delete "release/$MyNmae" + "-$MyVersion" + ".aar"
+    copy {
+        from('build/outputs/aar/')
+        into('release/')
+        include("$MyNmae-release.aar")
+        rename("$MyNmae-release", "$MyNmae-$MyVersion")
+    }
+    print "aar:$MyNmae" + "-" + "$MyVersion"
+
+}
+a_packaar.dependsOn(assemble)
